@@ -1,27 +1,96 @@
-In this DevOps task, you need to build and deploy a full-stack CRUD application using the MEAN stack (MongoDB, Express, Angular 15, and Node.js). The backend will be developed with Node.js and Express to provide REST APIs, connecting to a MongoDB database. The frontend will be an Angular application utilizing HTTPClient for communication.  
+# 🚀 Fullstack CRUD Application with Docker & CI/CD
 
-The application will manage a collection of tutorials, where each tutorial includes an ID, title, description, and published status. Users will be able to create, retrieve, update, and delete tutorials. Additionally, a search box will allow users to find tutorials by title.
+A production-ready fullstack CRUD application built using Angular, Node.js, MongoDB, Docker, and Jenkins CI/CD.
 
-## Project setup
+This project demonstrates complete containerization, automated deployment, and real-world DevOps practices.
 
-### Node.js Server
+---
 
-cd backend
+## 📌 Project Overview
 
-npm install
+This application allows users to:
 
-You can update the MongoDB credentials by modifying the `db.config.js` file located in `app/config/`.
+- Create tutorials
+- View tutorials
+- Update tutorials
+- Delete tutorials
 
-Run `node server.js`
+The entire system is fully containerized and automatically deployed using a CI/CD pipeline.
 
-### Angular Client
+---
 
-cd frontend
+## 🏗️ Architecture
 
-npm install
+Browser  
+↓  
+Frontend (Angular + Nginx Container)  
+↓  
+Backend (Node.js + Express Container)  
+↓  
+MongoDB (Database Container)  
 
-Run `ng serve --port 8081`
+All services run inside Docker containers.
 
-You can modify the `src/app/services/tutorial.service.ts` file to adjust how the frontend interacts with the backend.
+---
 
-Navigate to `http://localhost:8081/`
+## 🐳 Docker Implementation
+
+### 🔹 Backend
+- Node.js (Express)
+- MongoDB connection
+- CORS enabled
+- Multi-stage Docker build
+- Exposed on port 8080
+
+### 🔹 Frontend
+- Angular production build
+- Served via Nginx
+- Multi-stage Dockerfile
+- Runs on port 80
+
+### 🔹 Docker Compose
+Used to orchestrate:
+- Frontend container
+- Backend container
+
+Production deployment uses Docker Hub images.
+
+---
+
+## 🔁 CI/CD Pipeline (Jenkins)
+
+The pipeline consists of 4 automated stages:
+
+### 🟢 Stage 1 – Code Clone
+Clones latest source code from GitHub repository.
+
+### 🟢 Stage 2 – Build Docker Images
+Builds:
+- Backend Docker image
+- Frontend Docker image
+
+### 🟢 Stage 3 – Push to Docker Hub
+Pushes newly built images to Docker Hub registry.
+
+### 🟢 Stage 4 – Deploy
+Pulls latest images and redeploys containers using Docker Compose.
+
+---
+
+## 🔔 Automated Trigger (Webhook Integration)
+
+A GitHub Webhook is configured with Jenkins.
+
+Whenever changes are pushed to the GitHub repository:
+- Jenkins automatically triggers the pipeline
+- New Docker images are built
+- Images are pushed to Docker Hub
+- Application is automatically redeployed
+
+This ensures continuous integration and continuous deployment without manual intervention.
+
+---
+
+## 🌐 Live Application
+
+You can access the live application here: http://35.208.126.145/tutorials
