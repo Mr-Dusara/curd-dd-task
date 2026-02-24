@@ -1,0 +1,36 @@
+pipeline{
+    agent any
+    
+    stages{
+        stage("Code Clone"){
+            steps{
+                echo "Code Clone Stage"
+                git url: "https://github.com/Mr-Dusara/curd-dd-task.git/", branch: "master"
+            }
+        }
+        stage("Image Build"){
+            steps{
+                echo "Code Build Stage"
+                sh "docker build -f backend/BackendFile -t dooms002/backend:latest ./backend"
+                sh "docker build -f frontend/FrontendFile -t dooms002/frontend:latest ./frontend"
+            }
+        }
+        stage("Push To DockerHub"){
+            steps{withCredentials([usernamePassword(
+                    credentialsId:"DockerHubCred",
+                    usernameVariable:"dockerHubUser", 
+                    passwordVariable:"dockerHubPass")]){
+                echo "image push"
+                sh 'echo $dockerHubPass | docker login -u $dockerHubUser --password-stdin'
+                sh "docker push dooms002/backend:latest"
+                sh "docker push dooms002/frontend:latest"
+              }
+            }
+        }
+        stage("Deploy"){
+            steps{
+                sh "docker compose down && docker compose up -d --build"
+            }
+        }
+    }
+}
